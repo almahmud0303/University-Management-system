@@ -26,10 +26,13 @@ Route::get('/dashboard', function () {
     abort(403, 'Unauthorized access');
 })->middleware(['auth', 'verified', 'prevent-back'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth', 'role:admin', 'prevent-back'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+    
+    Route::resource('departments', App\Http\Controllers\Admin\DepartmentController::class);
+    Route::resource('teachers', App\Http\Controllers\Admin\TeacherController::class);
+    Route::resource('students', App\Http\Controllers\Admin\StudentController::class);
+    Route::resource('staff', App\Http\Controllers\Admin\StaffController::class);
 });
 
 require __DIR__.'/auth.php';
