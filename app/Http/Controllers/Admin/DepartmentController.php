@@ -3,63 +3,83 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\{Department, User};
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $departments = Department::with('head')
+            ->orderBy('name')
+            ->paginate(15);
+
+        return view('admin.departments.index', compact('departments'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $teachers = User::where('role', 'teacher')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.departments.create', compact('teachers'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:10|unique:departments,code',
+            'description' => 'nullable|string',
+            'head_user_id' => 'nullable|exists:users,id',
+        ]);
+
+        Department::create($validated);
+
+        return redirect()->route('admin.departments.index')
+            ->with('success', 'Department created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Department $department)
     {
-        //
+        $department->load('head', 'teachers', 'students', 'courses');
+
+        return view('admin.departments.show', compact('department'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Department $department)
     {
-        //
+        $teachers = User::where('role', 'teacher')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.departments.edit', compact('department', 'teachers'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Department $department)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:10|unique:departments,code,' . $department->id,
+            'description' => 'nullable|string',
+            'head_user_id' => 'nullable|exists:users,id',
+            'is_active' => 'boolean',
+        ]);
+
+        $department->update($validated);
+
+        return redirect()->route('admin.departments.index')
+            ->with('success', 'Department updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Department $department)
     {
-        //
+        $department->delete();
+
+        return redirect()->route('admin.departments.index')
+            ->with('success', 'Department deleted successfully.');
     }
 }
