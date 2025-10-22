@@ -5,6 +5,37 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin', 'prevent.back'])->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+    
+    // User Management
+    Route::resource('teachers', App\Http\Controllers\Admin\TeacherController::class);
+    Route::resource('students', App\Http\Controllers\Admin\StudentController::class);
+    Route::resource('staff', App\Http\Controllers\Admin\StaffController::class);
+    
+    // Department Management
+    Route::resource('departments', App\Http\Controllers\Admin\DepartmentController::class);
+    
+    // Course Management
+    Route::resource('courses', App\Http\Controllers\Admin\CourseController::class);
+    
+    // Hall Management
+    Route::resource('halls', App\Http\Controllers\Admin\HallController::class);
+    Route::post('halls/{hall}/assign-student', [App\Http\Controllers\Admin\HallController::class, 'assignStudent'])->name('halls.assign-student');
+    Route::delete('students/{student}/remove-from-hall', [App\Http\Controllers\Admin\HallController::class, 'removeStudent'])->name('halls.remove-student');
+    
+    // Fee Management
+    Route::resource('fees', App\Http\Controllers\Admin\FeeController::class);
+    Route::patch('fees/{fee}/mark-paid', [App\Http\Controllers\Admin\FeeController::class, 'markPaid'])->name('fees.mark-paid');
+    
+    // Notice Management
+    Route::resource('notices', App\Http\Controllers\Admin\NoticeController::class);
+    Route::patch('notices/{notice}/publish', [App\Http\Controllers\Admin\NoticeController::class, 'publish'])->name('notices.publish');
+    
+    // Exam Management
+    Route::resource('exams', App\Http\Controllers\Admin\ExamController::class);
+});
 Route::get('/', function () {
     return redirect()->route('login');
 });
