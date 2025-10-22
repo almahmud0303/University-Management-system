@@ -12,15 +12,14 @@ class Staff extends Model
 
     protected $fillable = [
         'user_id',
-        'department_id',
         'employee_id',
-        'position',
-        'qualification',
+        'designation',
+        'department',
         'salary',
         'joining_date',
         'employment_type',
+        'bio',
         'location',
-        'responsibilities',
         'is_active',
     ];
 
@@ -36,13 +35,25 @@ class Staff extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function department()
+    public function bookIssues()
     {
-        return $this->belongsTo(Department::class);
+        return $this->hasMany(BookIssue::class);
     }
 
-    public function issuedBooks()
+    // Scopes
+    public function scopeActive($query)
     {
-        return $this->hasMany(BookIssue::class, 'issued_by');
+        return $query->where('is_active', true);
+    }
+
+    // Helper methods
+    public function getFullNameAttribute()
+    {
+        return $this->user->name;
+    }
+
+    public function getEmailAttribute()
+    {
+        return $this->user->email;
     }
 }

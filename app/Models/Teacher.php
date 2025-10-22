@@ -52,6 +52,12 @@ class Teacher extends Model
         return $this->hasManyThrough(Exam::class, Course::class);
     }
 
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
     // Helper Methods
     public function isDepartmentHead()
     {

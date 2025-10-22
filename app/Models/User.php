@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasOne(Staff::class);
     }
 
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'head_user_id');
+    }
+
     // Helper Methods
     public function isAdmin()
     {
@@ -78,6 +83,6 @@ class User extends Authenticatable
 
     public function isDepartmentHead()
     {
-        return $this->role === 'department-head';
+        return $this->role === 'department_head';
     }
 }

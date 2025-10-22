@@ -18,7 +18,7 @@ class DashboardController extends Controller
             'total_staff' => Staff::count(),
             'total_courses' => Course::count(),
             'active_courses' => Course::where('is_active', true)->count(),
-            // 'total_departments' => Department::count(),
+             'total_departments' => Department::count(),
         ];
 
         // Recent records

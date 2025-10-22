@@ -10,22 +10,28 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name' => 'System Administrator',
-            'email' => 'admin@kuet.ac.bd',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'phone' => '01700000000',
-            'is_active' => true,
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@kuet.ac.bd'],
+            [
+                'name' => 'System Administrator',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'phone' => '01700000000',
+                'is_active' => true,
+            ]
+        );
 
-        User::create([
-            'name' => 'Vice Chancellor',
-            'email' => 'vc@kuet.ac.bd',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'phone' => '01700000001',
-            'is_active' => true,
-        ]);
+        User::firstOrCreate(
+            ['email' => 'vc@kuet.ac.bd'],
+            [
+                'name' => 'Vice Chancellor',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'phone' => '01700000001',
+                'is_active' => true,
+            ]
+        );
     }
 }

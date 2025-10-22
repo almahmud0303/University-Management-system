@@ -11,23 +11,26 @@ class Exam extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'title',
+        'description',
         'course_id',
-        'exam_name',
-        'exam_type',
+        'type',
         'exam_date',
         'start_time',
         'end_time',
         'total_marks',
-        'passing_marks',
-        'room_number',
-        'instructions',
-        'is_published',
+        'venue',
+        'status',
     ];
 
-    protected $casts = [
-        'exam_date' => 'date',
-        'is_published' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'exam_date' => 'date',
+            'start_time' => 'datetime:H:i',
+            'end_time' => 'datetime:H:i',
+        ];
+    }
 
     public function course()
     {
@@ -37,5 +40,40 @@ class Exam extends Model
     public function results()
     {
         return $this->hasMany(Result::class);
+    }
+
+    // Scopes
+    public function scopeScheduled($query)
+    {
+        return $query->where('status', 'scheduled');
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'completed');
+    }
+
+    public function scopeByType($query, $type)
+    {
+        return $query->where('type', $type);
+    }
+
+    // Helper methods
+    public function getDurationAttribute()
+    {
+        $start = \Carbon\Carbon::parse($this->start_time);
+        $end = \Carbon\Carbon::parse($this->end_time);
+        return $start->diffInMinutes($end);
+    }
+
+    public function getFormattedDateAttribute()
+    {
+        return $this->exam_date->format('M d, Y');
+    }
+
+    public function getFormattedTimeAttribute()
+    {
+        return \Carbon\Carbon::parse($this->start_time)->format('h:i A') . ' - ' . 
+               \Carbon\Carbon::parse($this->end_time)->format('h:i A');
     }
 }
