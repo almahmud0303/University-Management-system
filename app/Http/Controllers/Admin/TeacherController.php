@@ -35,12 +35,12 @@ class TeacherController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'employee_id' => 'required|string|max:255|unique:teachers',
             'department_id' => 'required|exists:departments,id',
+            'designation' => 'nullable|string|max:255',
             'qualification' => 'nullable|string|max:255',
             'specialization' => 'nullable|string|max:255',
             'salary' => 'nullable|numeric|min:0',
             'joining_date' => 'required|date',
             'employment_type' => 'required|in:full_time,part_time,contract',
-            'bio' => 'nullable|string',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -65,12 +65,12 @@ class TeacherController extends Controller
             'user_id' => $user->id,
             'department_id' => $request->department_id,
             'employee_id' => $request->employee_id,
+            'designation' => $request->designation,
             'qualification' => $request->qualification,
             'specialization' => $request->specialization,
             'salary' => $request->salary,
             'joining_date' => $request->joining_date,
             'employment_type' => $request->employment_type,
-            'bio' => $request->bio,
             'is_active' => true,
         ]);
 
@@ -110,12 +110,12 @@ class TeacherController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email,' . $teacher->user_id,
             'employee_id' => 'required|string|max:255|unique:teachers,employee_id,' . $teacher->id,
             'department_id' => 'required|exists:departments,id',
+            'designation' => 'nullable|string|max:255',
             'qualification' => 'nullable|string|max:255',
             'specialization' => 'nullable|string|max:255',
             'salary' => 'nullable|numeric|min:0',
             'joining_date' => 'required|date',
             'employment_type' => 'required|in:full_time,part_time,contract',
-            'bio' => 'nullable|string',
             'is_active' => 'boolean',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -142,12 +142,12 @@ class TeacherController extends Controller
         $teacher->update([
             'department_id' => $request->department_id,
             'employee_id' => $request->employee_id,
+            'designation' => $request->designation,
             'qualification' => $request->qualification,
             'specialization' => $request->specialization,
             'salary' => $request->salary,
             'joining_date' => $request->joining_date,
             'employment_type' => $request->employment_type,
-            'bio' => $request->bio,
             'is_active' => $request->has('is_active'),
         ]);
 

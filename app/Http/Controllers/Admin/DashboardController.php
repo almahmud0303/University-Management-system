@@ -54,7 +54,6 @@ class DashboardController extends Controller
 
         $upcomingExams = Exam::with('course')
             ->where('exam_date', '>=', now())
-            ->where('status', 'scheduled')
             ->orderBy('exam_date')
             ->limit(5)
             ->get();
