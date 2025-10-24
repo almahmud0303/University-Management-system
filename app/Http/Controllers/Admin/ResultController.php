@@ -74,7 +74,7 @@ class ResultController extends Controller
         $request->validate([
             'exam_id' => 'required|exists:exams,id',
             'student_id' => 'required|exists:students,id',
-            'marks' => 'required|numeric|min:0',
+            'marks_obtained' => 'required|numeric|min:0',
             'remarks' => 'nullable|string|max:500',
             'is_published' => 'boolean',
         ]);
@@ -90,7 +90,7 @@ class ResultController extends Controller
 
         // Get exam details for grade calculation
         $exam = Exam::find($request->exam_id);
-        $percentage = ($request->marks / $exam->total_marks) * 100;
+        $percentage = ($request->marks_obtained / $exam->total_marks) * 100;
 
         // Calculate grade and grade point
         $grade = $this->calculateGrade($percentage);
@@ -99,7 +99,7 @@ class ResultController extends Controller
         Result::create([
             'exam_id' => $request->exam_id,
             'student_id' => $request->student_id,
-            'marks' => $request->marks,
+            'marks_obtained' => $request->marks_obtained,
             'grade' => $grade,
             'grade_point' => $gradePoint,
             'remarks' => $request->remarks,
@@ -140,7 +140,7 @@ class ResultController extends Controller
         $request->validate([
             'exam_id' => 'required|exists:exams,id',
             'student_id' => 'required|exists:students,id',
-            'marks' => 'required|numeric|min:0',
+            'marks_obtained' => 'required|numeric|min:0',
             'remarks' => 'nullable|string|max:500',
             'is_published' => 'boolean',
         ]);
@@ -157,7 +157,7 @@ class ResultController extends Controller
 
         // Get exam details for grade calculation
         $exam = Exam::find($request->exam_id);
-        $percentage = ($request->marks / $exam->total_marks) * 100;
+        $percentage = ($request->marks_obtained / $exam->total_marks) * 100;
 
         // Calculate grade and grade point
         $grade = $this->calculateGrade($percentage);
@@ -166,7 +166,7 @@ class ResultController extends Controller
         $result->update([
             'exam_id' => $request->exam_id,
             'student_id' => $request->student_id,
-            'marks' => $request->marks,
+            'marks_obtained' => $request->marks_obtained,
             'grade' => $grade,
             'grade_point' => $gradePoint,
             'remarks' => $request->remarks,
@@ -196,7 +196,7 @@ class ResultController extends Controller
             'exam_id' => 'required|exists:exams,id',
             'results' => 'required|array',
             'results.*.student_id' => 'required|exists:students,id',
-            'results.*.marks' => 'required|numeric|min:0',
+            'results.*.marks_obtained' => 'required|numeric|min:0',
             'results.*.remarks' => 'nullable|string|max:500',
         ]);
 
@@ -211,14 +211,14 @@ class ResultController extends Controller
                     ->first();
 
                 if (!$existingResult) {
-                    $percentage = ($resultData['marks'] / $exam->total_marks) * 100;
+                    $percentage = ($resultData['marks_obtained'] / $exam->total_marks) * 100;
                     $grade = $this->calculateGrade($percentage);
                     $gradePoint = $this->calculateGradePoint($grade);
 
                     Result::create([
                         'exam_id' => $request->exam_id,
                         'student_id' => $resultData['student_id'],
-                        'marks' => $resultData['marks'],
+                        'marks_obtained' => $resultData['marks_obtained'],
                         'grade' => $grade,
                         'grade_point' => $gradePoint,
                         'remarks' => $resultData['remarks'] ?? null,

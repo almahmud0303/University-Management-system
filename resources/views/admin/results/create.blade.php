@@ -47,9 +47,9 @@
 
                             <!-- Marks -->
                             <div>
-                                <label for="marks" class="block text-sm font-medium text-gray-700">Marks Obtained <span class="text-red-500">*</span></label>
-                                <input type="number" name="marks" id="marks" step="0.01" min="0" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('marks') border-red-300 @enderror" value="{{ old('marks') }}">
-                                @error('marks')
+                                <label for="marks_obtained" class="block text-sm font-medium text-gray-700">Marks Obtained <span class="text-red-500">*</span></label>
+                                <input type="number" name="marks_obtained" id="marks_obtained" step="0.01" min="0" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('marks_obtained') border-red-300 @enderror" value="{{ old('marks_obtained') }}">
+                                @error('marks_obtained')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>

@@ -28,7 +28,7 @@ class TeacherFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'department_id' => Department::factory(),
+            'department_id' => Department::inRandomOrder()->first()?->id ?? 1,
             'employee_id' => $this->faker->unique()->numerify('TCH####'),
             'designation' => $this->faker->randomElement(['Professor', 'Associate Professor', 'Assistant Professor', 'Lecturer']),
             'qualification' => $this->faker->randomElement(['PhD', 'MSc', 'MEng', 'MBA']),

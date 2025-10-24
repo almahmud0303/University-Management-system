@@ -14,7 +14,9 @@ class Staff extends Model
         'user_id',
         'employee_id',
         'designation',
-        'department',
+        'department_id',
+        'qualification',
+        'specialization',
         'salary',
         'joining_date',
         'employment_type',
@@ -35,9 +37,19 @@ class Staff extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
     public function bookIssues()
     {
         return $this->hasMany(BookIssue::class);
+    }
+
+    public function halls()
+    {
+        return $this->hasMany(Hall::class);
     }
 
     // Scopes

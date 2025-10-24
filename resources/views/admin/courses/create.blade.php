@@ -137,17 +137,17 @@
 
                             <!-- Type -->
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Course Type *</label>
-                                <select name="type" id="type" 
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('type') border-red-300 @enderror" 
+                                <label for="course_type" class="block text-sm font-medium text-gray-700">Course Type *</label>
+                                <select name="course_type" id="course_type" 
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('course_type') border-red-300 @enderror" 
                                         required>
                                     <option value="">Select type</option>
-                                    <option value="theory" {{ old('type') == 'theory' ? 'selected' : '' }}>Theory</option>
-                                    <option value="lab" {{ old('type') == 'lab' ? 'selected' : '' }}>Lab</option>
-                                    <option value="project" {{ old('type') == 'project' ? 'selected' : '' }}>Project</option>
-                                    <option value="thesis" {{ old('type') == 'thesis' ? 'selected' : '' }}>Thesis</option>
+                                    <option value="theory" {{ old('course_type') == 'theory' ? 'selected' : '' }}>Theory</option>
+                                    <option value="lab" {{ old('course_type') == 'lab' ? 'selected' : '' }}>Lab</option>
+                                    <option value="project" {{ old('course_type') == 'project' ? 'selected' : '' }}>Project</option>
+                                    <option value="thesis" {{ old('course_type') == 'thesis' ? 'selected' : '' }}>Thesis</option>
                                 </select>
-                                @error('type')
+                                @error('course_type')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>

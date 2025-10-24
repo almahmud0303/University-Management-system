@@ -64,8 +64,9 @@ class DashboardController extends Controller
         // Get recent notices
         $recentNotices = Notice::where('is_published', true)
             ->where(function($query) {
-                $query->whereJsonContains('target_roles', 'teacher')
-                      ->orWhereJsonContains('target_roles', 'all');
+                $query->whereNull('target_role')
+                      ->orWhere('target_role', 'all')
+                      ->orWhere('target_role', 'teacher');
             })
             ->where('publish_date', '<=', now())
             ->where(function($query) {

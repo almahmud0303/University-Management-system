@@ -24,9 +24,10 @@ class NoticeController extends Controller
         $notices = Notice::with('user')
             ->where('user_id', Auth::id())
             ->where(function($query) use ($departmentHead) {
-                $query->whereJsonContains('target_roles', 'student')
-                      ->orWhereJsonContains('target_roles', 'teacher')
-                      ->orWhereJsonContains('target_roles', 'staff');
+                $query->where('target_role', 'student')
+                      ->orWhere('target_role', 'teacher')
+                      ->orWhere('target_role', 'staff')
+                      ->orWhere('target_role', 'all');
             })
             ->latest()
             ->paginate(15);
@@ -64,8 +65,7 @@ class NoticeController extends Controller
             'content' => 'required|string',
             'type' => 'required|in:general,academic,exam,fee,library,event',
             'priority' => 'required|in:low,medium,high,urgent',
-            'target_roles' => 'nullable|array',
-            'target_roles.*' => 'in:student,teacher,staff,admin',
+            'target_role' => 'nullable|in:student,teacher,staff,admin,all',
             'publish_date' => 'required|date|after_or_equal:today',
             'expiry_date' => 'nullable|date|after:publish_date',
             'is_published' => 'boolean',
@@ -73,7 +73,7 @@ class NoticeController extends Controller
         ]);
 
         // Automatically target department members
-        $targetRoles = $request->target_roles ?? ['student', 'teacher'];
+        $targetRole = $request->target_role ?? 'all';
         
         Notice::create([
             'user_id' => Auth::id(),
@@ -81,7 +81,7 @@ class NoticeController extends Controller
             'content' => $request->content,
             'type' => $request->type,
             'priority' => $request->priority,
-            'target_roles' => $targetRoles,
+            'target_role' => $targetRole,
             'publish_date' => $request->publish_date,
             'expiry_date' => $request->expiry_date,
             'is_published' => $request->has('is_published'),
@@ -151,8 +151,7 @@ class NoticeController extends Controller
             'content' => 'required|string',
             'type' => 'required|in:general,academic,exam,fee,library,event',
             'priority' => 'required|in:low,medium,high,urgent',
-            'target_roles' => 'nullable|array',
-            'target_roles.*' => 'in:student,teacher,staff,admin',
+            'target_role' => 'nullable|in:student,teacher,staff,admin,all',
             'publish_date' => 'required|date',
             'expiry_date' => 'nullable|date|after:publish_date',
             'is_published' => 'boolean',
@@ -164,7 +163,7 @@ class NoticeController extends Controller
             'content' => $request->content,
             'type' => $request->type,
             'priority' => $request->priority,
-            'target_roles' => $request->target_roles ?? ['student', 'teacher'],
+            'target_role' => $request->target_role ?? 'all',
             'publish_date' => $request->publish_date,
             'expiry_date' => $request->expiry_date,
             'is_published' => $request->has('is_published'),

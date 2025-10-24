@@ -4,7 +4,45 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Dashboard route
+Route::get('/dashboard', function () {
+    if (Auth::check()) {
+        $user = Auth::user();
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->isTeacher()) {
+            return redirect()->route('teacher.dashboard');
+        } elseif ($user->isStudent()) {
+            return redirect()->route('student.dashboard');
+        } elseif ($user->isStaff()) {
+            return redirect()->route('staff.dashboard');
+        } elseif ($user->isDepartmentHead()) {
+            return redirect()->route('department-head.dashboard');
+        }
+    }
+    return redirect()->route('login');
+})->middleware('auth')->name('dashboard');
+
+// Test route to check authentication
+Route::get('/test-auth', function () {
+    if (Auth::check()) {
+        return response()->json([
+            'authenticated' => true,
+            'user' => Auth::user()->name,
+            'role' => Auth::user()->role,
+            'email' => Auth::user()->email
+        ]);
+    } else {
+        return response()->json(['authenticated' => false]);
+    }
+});
 
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin', 'prevent-back'])->group(function () {
@@ -28,7 +66,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin', 'preve
     Route::get('courses/organize', [App\Http\Controllers\Admin\CourseManagementController::class, 'organize'])->name('courses.organize');
     Route::post('courses/bulk-assign', [App\Http\Controllers\Admin\CourseManagementController::class, 'bulkAssign'])->name('courses.bulk-assign');
     Route::get('courses/department/{departmentId}', [App\Http\Controllers\Admin\CourseManagementController::class, 'getByDepartment'])->name('courses.by-department');
-    Route::resource('courses', App\Http\Controllers\Admin\CourseManagementController::class);
+    Route::resource('courses', App\Http\Controllers\Admin\CourseController::class);
     
     // Exam Management
     Route::resource('exams', App\Http\Controllers\Admin\ExamController::class);

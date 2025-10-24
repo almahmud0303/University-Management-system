@@ -31,7 +31,7 @@ class NoticeFactory extends Factory
             'content' => $this->faker->paragraphs(3, true),
             'type' => $this->faker->randomElement(['general', 'academic', 'exam', 'fee', 'library', 'event']),
             'priority' => $this->faker->randomElement(['low', 'medium', 'high', 'urgent']),
-            'target_roles' => $this->faker->randomElements(['admin', 'teacher', 'student', 'staff', 'department_head'], $this->faker->numberBetween(1, 3)),
+            'target_role' => $this->faker->randomElement(['admin', 'teacher', 'student', 'staff', 'department_head', 'all']),
             'publish_date' => $this->faker->dateTimeBetween('-1 month', 'now'),
             'expiry_date' => $this->faker->dateTimeBetween('now', '+1 month'),
             'is_published' => $this->faker->boolean(80),
