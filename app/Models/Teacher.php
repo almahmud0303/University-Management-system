@@ -52,6 +52,11 @@ class Teacher extends Model
         return $this->hasManyThrough(Exam::class, Course::class);
     }
 
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
     // Scopes
     public function scopeActive($query)
     {

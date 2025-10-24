@@ -29,7 +29,7 @@ class StudentFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'department_id' => Department::factory(),
+            'department_id' => Department::inRandomOrder()->first()?->id ?? 1,
             'student_id' => $this->faker->unique()->numerify('STU####'),
             'roll_number' => $this->faker->unique()->numerify('ROLL####'),
             'registration_number' => $this->faker->unique()->numerify('REG####'),
@@ -38,7 +38,7 @@ class StudentFactory extends Factory
             'semester' => $this->faker->randomElement(['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th']),
             'admission_date' => $this->faker->dateTimeBetween('-2 years', 'now'),
             'status' => $this->faker->randomElement(['active', 'inactive', 'graduated', 'suspended']),
-            'hall_id' => Hall::factory(),
+            'hall_id' => Hall::inRandomOrder()->first()?->id ?? 1,
             'blood_group' => $this->faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
             'guardian_name' => $this->faker->name(),
             'guardian_phone' => $this->faker->phoneNumber(),

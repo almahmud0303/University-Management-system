@@ -16,7 +16,8 @@ class Notice extends Model
         'content',
         'type',
         'priority',
-        'target_roles',
+        'target_role',
+        'department_id',
         'publish_date',
         'expiry_date',
         'is_published',
@@ -26,7 +27,6 @@ class Notice extends Model
     protected function casts(): array
     {
         return [
-            'target_roles' => 'array',
             'publish_date' => 'date',
             'expiry_date' => 'date',
             'is_published' => 'boolean',
@@ -38,6 +38,16 @@ class Notice extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 
     // Scopes
@@ -71,9 +81,9 @@ class Notice extends Model
     }
 
     // Helper methods
-    public function getTargetRolesListAttribute()
+    public function getTargetRoleAttribute()
     {
-        return is_array($this->target_roles) ? implode(', ', $this->target_roles) : 'All';
+        return $this->target_role ?? 'all';
     }
 
     public function getIsExpiredAttribute()

@@ -11,25 +11,30 @@ class Course extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'title',
-        'course_code',
-        'description',
-        'credits',
         'department_id',
         'teacher_id',
-        'academic_year',
+        'course_code',
+        'title',
+        'description',
+        'credits',
         'semester',
+        'academic_year',
+        'course_type',
+        'prerequisites',
         'max_students',
-        'type',
+        'max_enrollments',
+        'fee_amount',
         'currency',
+        'fee_required',
         'is_active',
     ];
 
     protected function casts(): array
     {
         return [
-            'currency' => 'decimal:2',
             'is_active' => 'boolean',
+            'fee_required' => 'boolean',
+            'fee_amount' => 'decimal:2',
         ];
     }
 
@@ -51,8 +56,8 @@ class Course extends Model
     public function students()
     {
         return $this->belongsToMany(Student::class, 'enrollments')
-            ->withPivot('enrollment_date', 'status', 'grade_point', 'letter_grade')
-            ->withTimestamps();
+                    ->withPivot('status', 'enrollment_date')
+                    ->withTimestamps();
     }
 
     public function attendances()
@@ -63,6 +68,11 @@ class Course extends Model
     public function exams()
     {
         return $this->hasMany(Exam::class);
+    }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
     }
 
     public function payments()
@@ -86,14 +96,14 @@ class Course extends Model
         return $query->where('semester', $semester);
     }
 
-    // Helper methods
-    public function getEnrolledCountAttribute()
+    // Accessors
+    public function getCurrentEnrollmentCountAttribute()
     {
         return $this->enrollments()->where('status', 'enrolled')->count();
     }
 
     public function getAvailableSlotsAttribute()
     {
-        return $this->max_students - $this->enrolled_count;
+        return $this->max_students - $this->current_enrollment_count;
     }
 }

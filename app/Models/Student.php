@@ -90,6 +90,11 @@ class Student extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function assignmentSubmissions()
+    {
+        return $this->hasMany(AssignmentSubmission::class);
+    }
+
     // Scopes
     public function scopeActive($query)
     {

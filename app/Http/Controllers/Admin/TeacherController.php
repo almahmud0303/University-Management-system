@@ -168,4 +168,9 @@ class TeacherController extends Controller
         return redirect()->route('admin.teachers.index')
             ->with('success', 'Teacher deleted successfully.');
     }
+
+    public function credentials(Teacher $teacher)
+    {
+        return view('admin.teachers.credentials', compact('teacher'));
+    }
 }

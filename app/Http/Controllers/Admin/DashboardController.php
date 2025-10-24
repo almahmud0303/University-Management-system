@@ -22,19 +22,12 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         
-        // Get statistics
-        $stats = [
-            'total_users' => User::count(),
-            'total_students' => Student::count(),
-            'total_teachers' => Teacher::count(),
-            'total_staff' => Staff::count(),
-            'total_departments' => Department::count(),
-            'total_courses' => Course::count(),
-            'total_halls' => Hall::count(),
-            'active_courses' => Course::where('is_active', true)->count(),
-            'pending_payments' => Payment::where('status', 'pending')->count(),
-            'total_revenue' => Payment::where('status', 'completed')->sum('amount'),
-        ];
+        // Get statistics for dashboard cards
+        $totalStudents = Student::count();
+        $totalTeachers = Teacher::count();
+        $totalDepartments = Department::count();
+        $totalCourses = Course::count();
+        $totalHalls = Hall::count();
 
         // Get recent activities
         $recentStudents = Student::with('user', 'department')
@@ -59,11 +52,61 @@ class DashboardController extends Controller
             ->get();
 
         return view('admin.dashboard', compact(
-            'stats',
+            'totalStudents',
+            'totalTeachers',
+            'totalDepartments',
+            'totalCourses',
+            'totalHalls',
             'recentStudents',
             'recentTeachers',
             'recentNotices',
             'upcomingExams'
         ));
+    }
+
+    public function analytics()
+    {
+        // Get comprehensive analytics data
+        $analytics = [
+            'students' => [
+                'total' => Student::count(),
+                'active' => Student::where('is_active', true)->count(),
+                'by_year' => Student::selectRaw('academic_year, count(*) as count')
+                    ->groupBy('academic_year')
+                    ->get(),
+                'by_department' => Student::with('department')
+                    ->selectRaw('department_id, count(*) as count')
+                    ->groupBy('department_id')
+                    ->get(),
+            ],
+            'teachers' => [
+                'total' => Teacher::count(),
+                'active' => Teacher::where('is_active', true)->count(),
+                'by_department' => Teacher::with('department')
+                    ->selectRaw('department_id, count(*) as count')
+                    ->groupBy('department_id')
+                    ->get(),
+            ],
+            'courses' => [
+                'total' => Course::count(),
+                'active' => Course::where('is_active', true)->count(),
+                'by_department' => Course::with('department')
+                    ->selectRaw('department_id, count(*) as count')
+                    ->groupBy('department_id')
+                    ->get(),
+            ],
+            'exams' => [
+                'total' => Exam::count(),
+                'upcoming' => Exam::where('exam_date', '>=', now())->count(),
+                'completed' => Exam::where('exam_date', '<', now())->count(),
+            ],
+            'notices' => [
+                'total' => Notice::count(),
+                'published' => Notice::where('is_published', true)->count(),
+                'unpublished' => Notice::where('is_published', false)->count(),
+            ],
+        ];
+
+        return view('admin.analytics', compact('analytics'));
     }
 }

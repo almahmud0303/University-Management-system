@@ -104,4 +104,12 @@ class DepartmentController extends Controller
         return redirect()->route('admin.departments.index')
             ->with('success', 'Department deleted successfully.');
     }
+
+    public function toggleStatus(Department $department)
+    {
+        $department->is_active = !$department->is_active;
+        $department->save();
+
+        return back()->with('success', 'Department status updated successfully.');
+    }
 }

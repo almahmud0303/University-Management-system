@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
             'prevent-back' => \App\Http\Middleware\PreventBackButton::class,
+            'auto-enroll' => \App\Http\Middleware\AutoEnrollCompulsoryCourses::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

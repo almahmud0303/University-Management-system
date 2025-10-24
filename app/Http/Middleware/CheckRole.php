@@ -8,6 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
     public function handle(Request $request, Closure $next, string $role): Response
     {
         if (!auth()->check()) {
@@ -15,9 +20,15 @@ class CheckRole
         }
 
         $user = auth()->user();
+        
+        // Admin has access to everything
+        if ($user->role === 'admin') {
+            return $next($request);
+        }
 
+        // Check if user has the required role
         if ($user->role !== $role) {
-            abort(403, 'Unauthorized access.');
+            abort(403, 'Unauthorized access. Required role: ' . $role);
         }
 
         return $next($request);
