@@ -45,8 +45,9 @@ class DashboardController extends Controller
                 $query->where('teacher_id', $teacher->id);
             })
             ->where('exam_date', '>=', now())
-            ->orderBy('exam_date')
+            ->where('status', 'scheduled')
             ->with('course')
+            ->orderBy('exam_date')
             ->limit(5)
             ->get();
 

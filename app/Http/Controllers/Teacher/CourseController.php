@@ -54,6 +54,7 @@ class CourseController extends Controller
             'total_exams' => $course->exams()->count(),
             'upcoming_exams' => $course->exams()
                 ->where('exam_date', '>=', now())
+                ->where('status', 'scheduled')
                 ->count(),
         ];
 

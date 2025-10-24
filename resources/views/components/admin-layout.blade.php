@@ -22,6 +22,11 @@
                     <a href="{{ route('admin.teachers.index') }}" class="text-white hover:text-gray-200">Teachers</a>
                     <a href="{{ route('admin.students.index') }}" class="text-white hover:text-gray-200">Students</a>
                     <a href="{{ route('admin.staff.index') }}" class="text-white hover:text-gray-200">Staff</a>
+                    <a href="{{ route('admin.courses.index') }}" class="text-white hover:text-gray-200">Courses</a>
+                    <a href="{{ route('admin.halls.index') }}" class="text-white hover:text-gray-200">Halls</a>
+                    <a href="{{ route('admin.fees.index') }}" class="text-white hover:text-gray-200">Fees</a>
+                    <a href="{{ route('admin.notices.index') }}" class="text-white hover:text-gray-200">Notices</a>
+                    <a href="{{ route('admin.exams.index') }}" class="text-white hover:text-gray-200">Exams</a>
                     
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" class="text-white hover:text-gray-200 flex items-center">

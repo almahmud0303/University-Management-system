@@ -112,7 +112,7 @@ Route::prefix('teacher')->name('teacher.')->middleware(['auth', 'role:teacher', 
     
     // Academic routes
     Route::get('/academic', function () {
-        $teacher = Auth::user()->teacher;
+        $teacher = \Illuminate\Support\Facades\Auth::user()->teacher;
         $teacher->load(['department', 'courses.department']);
         return view('teacher.academic', compact('teacher'));
     })->name('academic');

@@ -96,6 +96,7 @@ class ExamController extends Controller
             'end_time' => $request->end_time,
             'total_marks' => $request->total_marks,
             'venue' => $request->venue,
+            'status' => 'scheduled',
         ]);
 
         return redirect()->route('teacher.exams.index')
@@ -159,6 +160,7 @@ class ExamController extends Controller
             'end_time' => 'required|date_format:H:i|after:start_time',
             'total_marks' => 'required|integer|min:1|max:1000',
             'venue' => 'nullable|string|max:255',
+            'status' => 'required|in:scheduled,ongoing,completed,cancelled',
         ]);
 
         $exam->update([
@@ -171,6 +173,7 @@ class ExamController extends Controller
             'end_time' => $request->end_time,
             'total_marks' => $request->total_marks,
             'venue' => $request->venue,
+            'status' => $request->status,
         ]);
 
         return redirect()->route('teacher.exams.index')
