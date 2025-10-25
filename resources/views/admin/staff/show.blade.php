@@ -41,7 +41,7 @@
                             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                                 <div class="bg-gray-50 p-3 rounded">
                                     <p class="text-xs text-gray-500">Department</p>
-                                    <p class="text-sm font-semibold">{{ $staff->department }}</p>
+                                    <p class="text-sm font-semibold">{{ $staff->department->name ?? 'Not assigned' }}</p>
                                 </div>
                                 <div class="bg-gray-50 p-3 rounded">
                                     <p class="text-xs text-gray-500">Employment Type</p>

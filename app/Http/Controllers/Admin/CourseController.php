@@ -10,13 +10,47 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::with(['department', 'teacher.user'])
-            ->latest()
-            ->paginate(15);
+        $query = Course::with(['department', 'teacher.user']);
 
-        return view('admin.courses.index', compact('courses'));
+        // Search by course title or code
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('course_code', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by department
+        if ($request->filled('department_id')) {
+            $query->where('department_id', $request->department_id);
+        }
+
+        // Filter by academic year
+        if ($request->filled('academic_year')) {
+            $query->where('academic_year', $request->academic_year);
+        }
+
+        // Filter by semester
+        if ($request->filled('semester')) {
+            $query->where('semester', $request->semester);
+        }
+
+        // Filter by course type
+        if ($request->filled('course_type')) {
+            $query->where('course_type', $request->course_type);
+        }
+
+        $courses = $query->latest()->paginate(15)->withQueryString();
+        
+        // Get filter options
+        $departments = Department::where('is_active', true)->get();
+        $academicYears = Course::distinct()->pluck('academic_year')->filter()->sort();
+        $semesters = Course::distinct()->pluck('semester')->filter()->sort();
+
+        return view('admin.courses.index', compact('courses', 'departments', 'academicYears', 'semesters'));
     }
 
     public function create()

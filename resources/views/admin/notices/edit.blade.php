@@ -87,36 +87,18 @@
                                 @enderror
                             </div>
 
-                            <!-- Target Roles -->
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Target Audience</label>
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="target_roles[]" value="all" 
-                                               {{ in_array('all', old('target_roles', $notice->target_roles ?? [])) ? 'checked' : '' }}
-                                               class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        <span class="ml-2 text-sm text-gray-700">All Users</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="target_roles[]" value="student" 
-                                               {{ in_array('student', old('target_roles', $notice->target_roles ?? [])) ? 'checked' : '' }}
-                                               class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        <span class="ml-2 text-sm text-gray-700">Students</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="target_roles[]" value="teacher" 
-                                               {{ in_array('teacher', old('target_roles', $notice->target_roles ?? [])) ? 'checked' : '' }}
-                                               class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        <span class="ml-2 text-sm text-gray-700">Teachers</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="target_roles[]" value="staff" 
-                                               {{ in_array('staff', old('target_roles', $notice->target_roles ?? [])) ? 'checked' : '' }}
-                                               class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        <span class="ml-2 text-sm text-gray-700">Staff</span>
-                                    </label>
-                                </div>
-                                @error('target_roles')
+                            <!-- Target Role -->
+                            <div>
+                                <label for="target_role" class="block text-sm font-medium text-gray-700">Target Audience</label>
+                                <select name="target_role" id="target_role" 
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('target_role') border-red-300 @enderror">
+                                    <option value="all" {{ old('target_role', $notice->target_role) == 'all' ? 'selected' : '' }}>All Users</option>
+                                    <option value="student" {{ old('target_role', $notice->target_role) == 'student' ? 'selected' : '' }}>Students Only</option>
+                                    <option value="teacher" {{ old('target_role', $notice->target_role) == 'teacher' ? 'selected' : '' }}>Teachers Only</option>
+                                    <option value="staff" {{ old('target_role', $notice->target_role) == 'staff' ? 'selected' : '' }}>Staff Only</option>
+                                    <option value="admin" {{ old('target_role', $notice->target_role) == 'admin' ? 'selected' : '' }}>Admins Only</option>
+                                </select>
+                                @error('target_role')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>

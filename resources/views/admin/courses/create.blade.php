@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Create Course') }}
+                {{ __('Create New Course') }}
             </h2>
-            <a href="{{ route('admin.courses.index') }}" class="text-blue-600 hover:text-blue-800">
-                ← Back to Courses
+            <a href="{{ route('admin.courses.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                Back to Courses
             </a>
         </div>
     </x-slot>
@@ -14,58 +14,40 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
-                    <form method="POST" action="{{ route('admin.courses.store') }}">
+                    <form method="POST" action="{{ route('admin.courses.store') }}" class="space-y-6">
                         @csrf
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Title -->
-                            <div class="md:col-span-2">
-                                <label for="title" class="block text-sm font-medium text-gray-700">Course Title *</label>
-                                <input type="text" name="title" id="title" value="{{ old('title') }}" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('title') border-red-300 @enderror" 
-                                       required>
-                                @error('title')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
 
-                            <!-- Course Code -->
+                        <!-- Course Code and Title -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="course_code" class="block text-sm font-medium text-gray-700">Course Code *</label>
-                                <input type="text" name="course_code" id="course_code" value="{{ old('course_code') }}" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('course_code') border-red-300 @enderror" 
-                                       required>
+                                <input type="text" id="course_code" name="course_code" value="{{ old('course_code') }}" required
+                                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('course_code') border-red-500 @enderror">
                                 @error('course_code')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Credits -->
                             <div>
-                                <label for="credits" class="block text-sm font-medium text-gray-700">Credits *</label>
-                                <select name="credits" id="credits" 
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('credits') border-red-300 @enderror" 
-                                        required>
-                                    <option value="">Select credits</option>
-                                    @for($i = 1; $i <= 6; $i++)
-                                        <option value="{{ $i }}" {{ old('credits') == $i ? 'selected' : '' }}>{{ $i }}</option>
-                                    @endfor
-                                </select>
-                                @error('credits')
+                                <label for="title" class="block text-sm font-medium text-gray-700">Course Title *</label>
+                                <input type="text" id="title" name="title" value="{{ old('title') }}" required
+                                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('title') border-red-500 @enderror">
+                                @error('title')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+                        </div>
 
-                            <!-- Department -->
+                        <!-- Department and Teacher -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="department_id" class="block text-sm font-medium text-gray-700">Department *</label>
-                                <select name="department_id" id="department_id" 
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('department_id') border-red-300 @enderror" 
-                                        required>
-                                    <option value="">Select department</option>
+                                <select id="department_id" name="department_id" required
+                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('department_id') border-red-500 @enderror">
+                                    <option value="">Select Department</option>
                                     @foreach($departments as $department)
                                         <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
-                                            {{ $department->name }}
+                                            {{ $department->name }} ({{ $department->code }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -74,12 +56,11 @@
                                 @enderror
                             </div>
 
-                            <!-- Teacher -->
                             <div>
                                 <label for="teacher_id" class="block text-sm font-medium text-gray-700">Teacher</label>
-                                <select name="teacher_id" id="teacher_id" 
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('teacher_id') border-red-300 @enderror">
-                                    <option value="">Select teacher (optional)</option>
+                                <select id="teacher_id" name="teacher_id"
+                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('teacher_id') border-red-500 @enderror">
+                                    <option value="">Select Teacher (Optional)</option>
                                     @foreach($teachers as $teacher)
                                         <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
                                             {{ $teacher->user->name }} ({{ $teacher->employee_id }})
@@ -90,58 +71,45 @@
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+                        </div>
 
-                            <!-- Academic Year -->
+                        <!-- Academic Year and Semester -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="academic_year" class="block text-sm font-medium text-gray-700">Academic Year *</label>
-                                <select name="academic_year" id="academic_year" 
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('academic_year') border-red-300 @enderror" 
-                                        required>
-                                    <option value="">Select academic year</option>
-                                    @for($year = date('Y'); $year <= date('Y') + 5; $year++)
-                                        <option value="{{ $year }}" {{ old('academic_year', date('Y')) == $year ? 'selected' : '' }}>{{ $year }}</option>
-                                    @endfor
-                                </select>
+                                <input type="text" id="academic_year" name="academic_year" value="{{ old('academic_year') }}" required
+                                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('academic_year') border-red-500 @enderror">
                                 @error('academic_year')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Semester -->
                             <div>
                                 <label for="semester" class="block text-sm font-medium text-gray-700">Semester *</label>
-                                <select name="semester" id="semester" 
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('semester') border-red-300 @enderror" 
-                                        required>
-                                    <option value="">Select semester</option>
-                                    @for($sem = 1; $sem <= 8; $sem++)
-                                        <option value="{{ $sem }}" {{ old('semester') == $sem ? 'selected' : '' }}>Semester {{ $sem }}</option>
-                                    @endfor
-                                </select>
+                                <input type="text" id="semester" name="semester" value="{{ old('semester') }}" required
+                                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('semester') border-red-500 @enderror">
                                 @error('semester')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+                        </div>
 
-                            <!-- Max Students -->
+                        <!-- Credits and Course Type -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label for="max_students" class="block text-sm font-medium text-gray-700">Max Students *</label>
-                                <input type="number" name="max_students" id="max_students" value="{{ old('max_students') }}" 
-                                       min="1" max="200"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('max_students') border-red-300 @enderror" 
-                                       required>
-                                @error('max_students')
+                                <label for="credits" class="block text-sm font-medium text-gray-700">Credits *</label>
+                                <input type="number" id="credits" name="credits" value="{{ old('credits') }}" step="0.5" min="0.5" max="6" required
+                                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('credits') border-red-500 @enderror">
+                                @error('credits')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Type -->
                             <div>
                                 <label for="course_type" class="block text-sm font-medium text-gray-700">Course Type *</label>
-                                <select name="course_type" id="course_type" 
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('course_type') border-red-300 @enderror" 
-                                        required>
-                                    <option value="">Select type</option>
+                                <select id="course_type" name="course_type" required
+                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('course_type') border-red-500 @enderror">
+                                    <option value="">Select Type</option>
                                     <option value="theory" {{ old('course_type') == 'theory' ? 'selected' : '' }}>Theory</option>
                                     <option value="lab" {{ old('course_type') == 'lab' ? 'selected' : '' }}>Lab</option>
                                     <option value="project" {{ old('course_type') == 'project' ? 'selected' : '' }}>Project</option>
@@ -151,49 +119,55 @@
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+                        </div>
 
-                            <!-- Currency -->
+                        <!-- Max Students and Fee -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label for="currency" class="block text-sm font-medium text-gray-700">Course Fee</label>
-                                <input type="number" name="currency" id="currency" value="{{ old('currency') }}" 
-                                       min="0" step="0.01"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('currency') border-red-300 @enderror">
-                                @error('currency')
+                                <label for="max_students" class="block text-sm font-medium text-gray-700">Max Students</label>
+                                <input type="number" id="max_students" name="max_students" value="{{ old('max_students') }}" min="1"
+                                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('max_students') border-red-500 @enderror">
+                                @error('max_students')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <!-- Description -->
-                            <div class="md:col-span-2">
-                                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                                <textarea name="description" id="description" rows="4" 
-                                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('description') border-red-300 @enderror">{{ old('description') }}</textarea>
-                                @error('description')
+                            <div>
+                                <label for="fee_amount" class="block text-sm font-medium text-gray-700">Fee Amount</label>
+                                <input type="number" id="fee_amount" name="fee_amount" value="{{ old('fee_amount') }}" step="0.01" min="0"
+                                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('fee_amount') border-red-500 @enderror">
+                                @error('fee_amount')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
-                            </div>
-
-                            <!-- Active Status -->
-                            <div class="md:col-span-2">
-                                <div class="flex items-center">
-                                    <input type="checkbox" name="is_active" id="is_active" value="1" 
-                                           {{ old('is_active', true) ? 'checked' : '' }}
-                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                    <label for="is_active" class="ml-2 block text-sm text-gray-900">
-                                        Active Course
-                                    </label>
-                                </div>
                             </div>
                         </div>
 
-                        <!-- Submit Button -->
-                        <div class="mt-6 flex justify-end space-x-3">
-                            <a href="{{ route('admin.courses.index') }}" 
-                               class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md text-sm font-medium">
+                        <!-- Description -->
+                        <div>
+                            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                            <textarea id="description" name="description" rows="4"
+                                      class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('description') border-red-500 @enderror">{{ old('description') }}</textarea>
+                            @error('description')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Status -->
+                        <div>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}
+                                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                <span class="ml-2 text-sm text-gray-700">Active Course</span>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center justify-end space-x-3">
+                            <a href="{{ route('admin.courses.index') }}"
+                               class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                                 Cancel
                             </a>
-                            <button type="submit" 
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                            <button type="submit"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 Create Course
                             </button>
                         </div>

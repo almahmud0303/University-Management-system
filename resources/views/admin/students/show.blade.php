@@ -144,8 +144,8 @@
                                 @foreach($student->courses->take(5) as $course)
                                     <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
                                         <div>
-                                            <p class="font-medium text-gray-900">{{ $course->name }}</p>
-                                            <p class="text-sm text-gray-600">{{ $course->code }}</p>
+                                            <p class="font-medium text-gray-900">{{ $course->title }}</p>
+                                            <p class="text-sm text-gray-600">{{ $course->course_code }}</p>
                                         </div>
                                         <span class="text-sm text-gray-500">{{ $course->credits }} credits</span>
                                     </div>
@@ -172,10 +172,10 @@
                                     <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
                                         <div>
                                             <p class="font-medium text-gray-900">{{ $result->exam->title }}</p>
-                                            <p class="text-sm text-gray-600">{{ $result->exam->course->name }}</p>
+                                            <p class="text-sm text-gray-600">{{ $result->exam->course->title }}</p>
                                         </div>
                                         <div class="text-right">
-                                            <p class="font-medium">{{ $result->marks }}/{{ $result->exam->total_marks }}</p>
+                                            <p class="font-medium">{{ $result->marks_obtained }}/{{ $result->exam->total_marks }}</p>
                                             <p class="text-sm text-gray-600">{{ $result->grade ?? 'N/A' }}</p>
                                         </div>
                                     </div>

@@ -17,8 +17,10 @@ class TeacherController extends Controller
         $teachers = Teacher::with(['user', 'department'])
             ->latest()
             ->paginate(15);
+        
+        $departments = Department::where('is_active', true)->get();
 
-        return view('admin.teachers.index', compact('teachers'));
+        return view('admin.teachers.index', compact('teachers', 'departments'));
     }
 
     public function create()

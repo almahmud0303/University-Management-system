@@ -9,11 +9,40 @@ use Illuminate\Support\Facades\Auth;
 
 class NoticeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $notices = Notice::with('user')
-            ->latest()
-            ->paginate(15);
+        $query = Notice::with('user');
+
+        // Search by title or content
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_published', true)
+                      ->where(function($q) {
+                          $q->whereNull('expiry_date')
+                            ->orWhere('expiry_date', '>=', now());
+                      });
+            } elseif ($request->status === 'expired') {
+                $query->where('expiry_date', '<', now());
+            } elseif ($request->status === 'draft') {
+                $query->where('is_published', false);
+            }
+        }
+
+        // Filter by target role
+        if ($request->filled('target_role')) {
+            $query->where('target_role', $request->target_role);
+        }
+
+        $notices = $query->latest()->paginate(15)->withQueryString();
 
         return view('admin.notices.index', compact('notices'));
     }

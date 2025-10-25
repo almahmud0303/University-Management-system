@@ -75,11 +75,17 @@
 
                             <!-- Department -->
                             <div>
-                                <label for="department" class="block text-sm font-medium text-gray-700">Department *</label>
-                                <input type="text" name="department" id="department" value="{{ old('department', $staff->department) }}" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('department') border-red-300 @enderror" 
-                                       required>
-                                @error('department')
+                                <label for="department_id" class="block text-sm font-medium text-gray-700">Department</label>
+                                <select name="department_id" id="department_id" 
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('department_id') border-red-300 @enderror">
+                                    <option value="">Select Department (Optional)</option>
+                                    @foreach($departments as $department)
+                                        <option value="{{ $department->id }}" {{ old('department_id', $staff->department_id) == $department->id ? 'selected' : '' }}>
+                                            {{ $department->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('department_id')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>

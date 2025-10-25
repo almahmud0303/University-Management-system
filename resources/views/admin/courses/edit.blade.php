@@ -153,13 +153,13 @@
                                 @enderror
                             </div>
 
-                            <!-- Currency -->
+                            <!-- Fee Amount -->
                             <div>
-                                <label for="currency" class="block text-sm font-medium text-gray-700">Course Fee</label>
-                                <input type="number" name="currency" id="currency" value="{{ old('currency', $course->currency) }}" 
+                                <label for="fee_amount" class="block text-sm font-medium text-gray-700">Course Fee</label>
+                                <input type="number" name="fee_amount" id="fee_amount" value="{{ old('fee_amount', $course->fee_amount) }}" 
                                        min="0" step="0.01"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('currency') border-red-300 @enderror">
-                                @error('currency')
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('fee_amount') border-red-300 @enderror">
+                                @error('fee_amount')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>

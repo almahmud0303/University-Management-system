@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="bg-gray-50 p-3 rounded">
                                     <p class="text-xs text-gray-500">Type</p>
-                                    <p class="text-lg font-semibold">{{ ucfirst($course->type) }}</p>
+                                    <p class="text-lg font-semibold">{{ ucfirst($course->course_type) }}</p>
                                 </div>
                                 <div class="bg-gray-50 p-3 rounded">
                                     <p class="text-xs text-gray-500">Academic Year</p>
@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="bg-gray-50 p-3 rounded">
                                     <p class="text-xs text-gray-500">Course Fee</p>
-                                    <p class="text-lg font-semibold">${{ number_format($course->currency, 2) }}</p>
+                                    <p class="text-lg font-semibold">${{ number_format($course->fee_amount, 2) }}</p>
                                 </div>
                                 <div class="bg-gray-50 p-3 rounded">
                                     <p class="text-xs text-gray-500">Status</p>

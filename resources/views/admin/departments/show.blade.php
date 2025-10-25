@@ -222,10 +222,10 @@
                                         @foreach($department->courses->take(10) as $course)
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm font-medium text-gray-900">{{ $course->name }}</div>
+                                                    <div class="text-sm font-medium text-gray-900">{{ $course->title }}</div>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                    {{ $course->code }}
+                                                    {{ $course->course_code }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                     {{ $course->teacher->user->name ?? 'Not Assigned' }}

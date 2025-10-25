@@ -64,7 +64,7 @@
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Course Code</dt>
-                                    <dd class="text-sm text-gray-900">{{ $result->exam->course->code }}</dd>
+                                    <dd class="text-sm text-gray-900">{{ $result->exam->course->course_code }}</dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Exam Title</dt>
@@ -90,7 +90,7 @@
                     <h4 class="text-lg font-medium text-gray-900 mb-4">Result Details</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="text-center p-4 bg-blue-50 rounded-lg">
-                            <div class="text-2xl font-bold text-blue-600">{{ $result->marks }}</div>
+                            <div class="text-2xl font-bold text-blue-600">{{ $result->marks_obtained }}</div>
                             <div class="text-sm text-blue-800">Marks Obtained</div>
                         </div>
                         <div class="text-center p-4 bg-green-50 rounded-lg">

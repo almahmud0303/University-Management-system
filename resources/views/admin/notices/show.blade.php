@@ -70,11 +70,9 @@
                     <div class="mb-4">
                         <h3 class="text-sm font-medium text-gray-900 mb-2">Target Audience</h3>
                         <div class="flex flex-wrap gap-2">
-                            @foreach($notice->target_roles as $role)
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                                    {{ ucfirst($role) }}
-                                </span>
-                            @endforeach
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                {{ ucfirst($notice->target_role) }}
+                            </span>
                         </div>
                     </div>
 

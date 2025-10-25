@@ -1,195 +1,40 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Create Staff Member') }}
-            </h2>
-            <a href="{{ route('admin.staff.index') }}" class="text-blue-600 hover:text-blue-800">
-                ← Back to Staff
-            </a>
-        </div>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Add New Staff Member</h2>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <form method="POST" action="{{ route('admin.staff.store') }}">
-                        @csrf
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Personal Information -->
-                            <div class="md:col-span-2">
-                                <h3 class="text-lg font-medium text-gray-900 mb-4">Personal Information</h3>
-                            </div>
-
-                            <!-- Name -->
-                            <div>
-                                <label for="name" class="block text-sm font-medium text-gray-700">Full Name *</label>
-                                <input type="text" name="name" id="name" value="{{ old('name') }}" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('name') border-red-300 @enderror" 
-                                       required>
-                                @error('name')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Email -->
-                            <div>
-                                <label for="email" class="block text-sm font-medium text-gray-700">Email Address *</label>
-                                <input type="email" name="email" id="email" value="{{ old('email') }}" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('email') border-red-300 @enderror" 
-                                       required>
-                                @error('email')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Password -->
-                            <div>
-                                <label for="password" class="block text-sm font-medium text-gray-700">Password *</label>
-                                <input type="password" name="password" id="password" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('password') border-red-300 @enderror" 
-                                       required>
-                                @error('password')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Confirm Password -->
-                            <div>
-                                <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password *</label>
-                                <input type="password" name="password_confirmation" id="password_confirmation" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('password_confirmation') border-red-300 @enderror" 
-                                       required>
-                                @error('password_confirmation')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Employee Information -->
-                            <div class="md:col-span-2">
-                                <h3 class="text-lg font-medium text-gray-900 mb-4">Employment Information</h3>
-                            </div>
-
-                            <!-- Employee ID -->
-                            <div>
-                                <label for="employee_id" class="block text-sm font-medium text-gray-700">Employee ID *</label>
-                                <input type="text" name="employee_id" id="employee_id" value="{{ old('employee_id') }}" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('employee_id') border-red-300 @enderror" 
-                                       required>
-                                @error('employee_id')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Designation -->
-                            <div>
-                                <label for="designation" class="block text-sm font-medium text-gray-700">Designation *</label>
-                                <input type="text" name="designation" id="designation" value="{{ old('designation') }}" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('designation') border-red-300 @enderror" 
-                                       required>
-                                @error('designation')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Department -->
-                            <div>
-                                <label for="department" class="block text-sm font-medium text-gray-700">Department *</label>
-                                <input type="text" name="department" id="department" value="{{ old('department') }}" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('department') border-red-300 @enderror" 
-                                       required>
-                                @error('department')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Employment Type -->
-                            <div>
-                                <label for="employment_type" class="block text-sm font-medium text-gray-700">Employment Type *</label>
-                                <select name="employment_type" id="employment_type" 
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('employment_type') border-red-300 @enderror" 
-                                        required>
-                                    <option value="">Select type</option>
-                                    <option value="full-time" {{ old('employment_type') == 'full-time' ? 'selected' : '' }}>Full Time</option>
-                                    <option value="part-time" {{ old('employment_type') == 'part-time' ? 'selected' : '' }}>Part Time</option>
-                                    <option value="contract" {{ old('employment_type') == 'contract' ? 'selected' : '' }}>Contract</option>
-                                    <option value="temporary" {{ old('employment_type') == 'temporary' ? 'selected' : '' }}>Temporary</option>
-                                </select>
-                                @error('employment_type')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Salary -->
-                            <div>
-                                <label for="salary" class="block text-sm font-medium text-gray-700">Salary</label>
-                                <input type="number" name="salary" id="salary" value="{{ old('salary') }}" 
-                                       step="0.01" min="0"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('salary') border-red-300 @enderror">
-                                @error('salary')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Joining Date -->
-                            <div>
-                                <label for="joining_date" class="block text-sm font-medium text-gray-700">Joining Date *</label>
-                                <input type="date" name="joining_date" id="joining_date" value="{{ old('joining_date') }}" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('joining_date') border-red-300 @enderror" 
-                                       required>
-                                @error('joining_date')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Location -->
-                            <div>
-                                <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
-                                <input type="text" name="location" id="location" value="{{ old('location') }}" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('location') border-red-300 @enderror">
-                                @error('location')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Bio -->
-                            <div class="md:col-span-2">
-                                <label for="bio" class="block text-sm font-medium text-gray-700">Bio</label>
-                                <textarea name="bio" id="bio" rows="3" 
-                                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('bio') border-red-300 @enderror">{{ old('bio') }}</textarea>
-                                @error('bio')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Status -->
-                            <div class="md:col-span-2">
-                                <div class="flex items-center">
-                                    <input type="checkbox" name="is_active" id="is_active" value="1" 
-                                           {{ old('is_active', true) ? 'checked' : '' }}
-                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                    <label for="is_active" class="ml-2 block text-sm text-gray-900">
-                                        Active
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="mt-6 flex justify-end space-x-3">
-                            <a href="{{ route('admin.staff.index') }}" 
-                               class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md text-sm font-medium">
-                                Cancel
-                            </a>
-                            <button type="submit" 
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
-                                Create Staff Member
-                            </button>
-                        </div>
-                    </form>
-                </div>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <form method="POST" action="{{ route('admin.staff.store') }}">
+                    @csrf
+                    <h3 class="text-lg font-semibold mb-4 border-b pb-2">Personal Information</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div><label class="block text-sm font-medium mb-1">Full Name *</label><input type="text" name="name" value="{{ old('name') }}" class="w-full border rounded px-3 py-2" required>@error('name')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror</div>
+                        <div><label class="block text-sm font-medium mb-1">Email *</label><input type="email" name="email" value="{{ old('email') }}" class="w-full border rounded px-3 py-2" required>@error('email')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror</div>
+                        <div><label class="block text-sm font-medium mb-1">Password *</label><input type="password" name="password" class="w-full border rounded px-3 py-2" required>@error('password')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror</div>
+                        <div><label class="block text-sm font-medium mb-1">Confirm Password *</label><input type="password" name="password_confirmation" class="w-full border rounded px-3 py-2" required></div>
+                        <div><label class="block text-sm font-medium mb-1">Phone</label><input type="tel" name="phone" value="{{ old('phone') }}" class="w-full border rounded px-3 py-2"></div>
+                        <div><label class="block text-sm font-medium mb-1">Date of Birth</label><input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" class="w-full border rounded px-3 py-2"></div>
+                        <div><label class="block text-sm font-medium mb-1">Gender</label><select name="gender" class="w-full border rounded px-3 py-2"><option value="">Select</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
+                        <div class="col-span-2"><label class="block text-sm font-medium mb-1">Address</label><textarea name="address" rows="2" class="w-full border rounded px-3 py-2">{{ old('address') }}</textarea></div>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-4 border-b pb-2">Employment Information</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div><label class="block text-sm font-medium mb-1">Employee ID *</label><input type="text" name="employee_id" value="{{ old('employee_id') }}" class="w-full border rounded px-3 py-2" required>@error('employee_id')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror</div>
+                        <div><label class="block text-sm font-medium mb-1">Position *</label><select name="designation" class="w-full border rounded px-3 py-2" required><option value="">Select Position</option><option value="librarian">Librarian</option><option value="clerk">Clerk</option><option value="accountant">Accountant</option><option value="lab_assistant">Lab Assistant</option><option value="office_assistant">Office Assistant</option><option value="other">Other</option></select>@error('designation')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror</div>
+                        <div><label class="block text-sm font-medium mb-1">Location *</label><select name="location" class="w-full border rounded px-3 py-2" required><option value="">Select Location</option><option value="library">Library</option><option value="administration">Administration Building</option><option value="department">Department</option></select>@error('location')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror</div>
+                        <div><label class="block text-sm font-medium mb-1">Department</label><select name="department_id" class="w-full border rounded px-3 py-2"><option value="">None (for admin/library staff)</option>@foreach($departments as $dept)<option value="{{ $dept->id }}">{{ $dept->name }}</option>@endforeach</select><p class="text-xs text-gray-500 mt-1">Only for department-assigned staff</p></div>
+                        <div><label class="block text-sm font-medium mb-1">Qualification</label><input type="text" name="qualification" value="{{ old('qualification') }}" class="w-full border rounded px-3 py-2"></div>
+                        <div><label class="block text-sm font-medium mb-1">Salary</label><input type="number" step="0.01" name="salary" value="{{ old('salary') }}" class="w-full border rounded px-3 py-2"></div>
+                        <div><label class="block text-sm font-medium mb-1">Joining Date *</label><input type="date" name="joining_date" value="{{ old('joining_date', now()->format('Y-m-d')) }}" class="w-full border rounded px-3 py-2" required></div>
+                        <div><label class="block text-sm font-medium mb-1">Employment Type *</label><select name="employment_type" class="w-full border rounded px-3 py-2" required><option value="full_time">Full Time</option><option value="part_time">Part Time</option><option value="contract">Contract</option></select></div>
+                        <div class="col-span-2"><label class="block text-sm font-medium mb-1">Responsibilities</label><textarea name="bio" rows="3" class="w-full border rounded px-3 py-2">{{ old('bio') }}</textarea></div>
+                    </div>
+                    <div class="flex justify-end gap-3">
+                        <a href="{{ route('admin.staff.index') }}" class="bg-gray-200 px-6 py-2 rounded">Cancel</a>
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Create Staff</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

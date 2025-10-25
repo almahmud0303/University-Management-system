@@ -9,11 +9,41 @@ use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $exams = Exam::with('course.department')
-            ->latest()
-            ->paginate(15);
+        $query = Exam::with('course.department');
+
+        // Search by exam title
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhereHas('course', function($courseQuery) use ($search) {
+                      $courseQuery->where('title', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Filter by exam type
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by date range
+        if ($request->filled('date_from')) {
+            $query->where('exam_date', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->where('exam_date', '<=', $request->date_to);
+        }
+
+        $exams = $query->latest()->paginate(15)->withQueryString();
 
         return view('admin.exams.index', compact('exams'));
     }

@@ -1,87 +1,88 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Staff') }}
-            </h2>
-            <a href="{{ route('admin.staff.create') }}" 
-               class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                Add Staff
-            </a>
-        </div>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Staff Management</h2>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if(session('success'))
+                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">{{ session('success') }}</div>
+            @endif
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    @if($staff->count() > 0)
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee ID</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach($staff as $staffMember)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="flex items-center">
-                                                    <div class="flex-shrink-0 h-10 w-10">
-                                                        <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                                                            <span class="text-sm font-medium text-gray-700">{{ substr($staffMember->user->name, 0, 1) }}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="ml-4">
-                                                        <div class="text-sm font-medium text-gray-900">{{ $staffMember->user->name }}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $staffMember->employee_id }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $staffMember->designation }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $staffMember->user->email }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $staffMember->phone ?? 'N/A' }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <div class="flex space-x-2">
-                                                    <a href="{{ route('admin.staff.show', $staffMember) }}" 
-                                                       class="text-indigo-600 hover:text-indigo-900">View</a>
-                                                    <a href="{{ route('admin.staff.edit', $staffMember) }}" 
-                                                       class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                                    <form method="POST" action="{{ route('admin.staff.destroy', $staffMember) }}" 
-                                                          class="inline" onsubmit="return confirm('Are you sure you want to delete this staff member?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                <div class="p-6">
+                    <div class="flex justify-between mb-6">
+                        <h3 class="text-2xl font-bold">Staff Members</h3>
+                        <a href="{{ route('admin.staff.create') }}" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Add New Staff</a>
+                    </div>
+                    <form method="GET" class="mb-6">
+                        <div class="grid grid-cols-5 gap-4">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, email, or ID..." class="border rounded px-4 py-2">
+                            <select name="designation" class="border rounded px-4 py-2">
+                                <option value="">All Positions</option>
+                                <option value="librarian" {{ request('designation') == 'librarian' ? 'selected' : '' }}>Librarian</option>
+                                <option value="clerk" {{ request('designation') == 'clerk' ? 'selected' : '' }}>Clerk</option>
+                                <option value="accountant" {{ request('designation') == 'accountant' ? 'selected' : '' }}>Accountant</option>
+                                <option value="lab_assistant" {{ request('designation') == 'lab_assistant' ? 'selected' : '' }}>Lab Assistant</option>
+                                <option value="office_assistant" {{ request('designation') == 'office_assistant' ? 'selected' : '' }}>Office Assistant</option>
+                                <option value="other" {{ request('designation') == 'other' ? 'selected' : '' }}>Other</option>
+                            </select>
+                            <select name="location" class="border rounded px-4 py-2">
+                                <option value="">All Locations</option>
+                                <option value="library" {{ request('location') == 'library' ? 'selected' : '' }}>Library</option>
+                                <option value="administration" {{ request('location') == 'administration' ? 'selected' : '' }}>Administration</option>
+                                <option value="department" {{ request('location') == 'department' ? 'selected' : '' }}>Department</option>
+                            </select>
+                            <select name="department_id" class="border rounded px-4 py-2">
+                                <option value="">All Departments</option>
+                                @foreach($departments as $dept)
+                                    <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>{{ $dept->code }}</option>
+                                @endforeach
+                            </select>
+                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Filter</button>
                         </div>
-                        
-                        <div class="mt-6">
-                            {{ $staff->links() }}
-                        </div>
-                    @else
-                        <div class="text-center py-8">
-                            <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                            <p class="text-gray-500">No staff members found.</p>
-                            <a href="{{ route('admin.staff.create') }}" 
-                               class="mt-2 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                                Add First Staff Member
-                            </a>
-                        </div>
-                    @endif
+                    </form>
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="text-left py-2">Name</th>
+                                <th class="text-left py-2">Employee ID</th>
+                                <th class="text-left py-2">Position</th>
+                                <th class="text-left py-2">Location</th>
+                                <th class="text-left py-2">Department</th>
+                                <th class="text-left py-2">Status</th>
+                                <th class="text-left py-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($staff as $member)
+                                <tr class="border-b hover:bg-gray-50">
+                                    <td class="py-3">{{ $member->user->name }}</td>
+                                    <td class="py-3">{{ $member->employee_id }}</td>
+                                    <td class="py-3">{{ ucfirst(str_replace('_', ' ', $member->designation)) }}</td>
+                                    <td class="py-3">
+                                        <span class="px-2 py-1 text-xs rounded {{ $member->location == 'library' ? 'bg-blue-100 text-blue-800' : ($member->location == 'administration' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800') }}">
+                                            {{ ucfirst($member->location ?? 'N/A') }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3">{{ $member->department->code ?? 'N/A' }}</td>
+                                    <td class="py-3">
+                                        <span class="px-2 py-1 text-xs rounded {{ $member->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                            {{ $member->is_active ? 'Active' : 'Inactive' }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3">
+                                        <a href="{{ route('admin.staff.show', $member->id) }}" class="text-blue-600 hover:underline mr-2">View</a>
+                                        <a href="{{ route('admin.staff.edit', $member->id) }}" class="text-green-600 hover:underline mr-2">Edit</a>
+                                        <form method="POST" action="{{ route('admin.staff.destroy', $member->id) }}" class="inline" onsubmit="return confirm('Delete this staff member?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div class="mt-4">{{ $staff->links() }}</div>
                 </div>
             </div>
         </div>
