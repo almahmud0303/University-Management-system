@@ -37,35 +37,36 @@ class CourseSeeder extends Seeder
                 'course_code' => 'CSE101',
                 'description' => 'Introduction to fundamental data structures and algorithms',
                 'credits' => 3,
-                'type' => 'theory',
+
+                'course_type' => 'theory',
             ],
             [
                 'title' => 'Database Management Systems',
                 'course_code' => 'CSE102',
                 'description' => 'Design and implementation of database systems',
                 'credits' => 3,
-                'type' => 'theory',
+                'course_type' => 'theory',
             ],
             [
                 'title' => 'Programming Lab I',
                 'course_code' => 'CSE103',
                 'description' => 'Practical programming exercises',
                 'credits' => 1,
-                'type' => 'lab',
+                'course_type' => 'lab',
             ],
             [
                 'title' => 'Software Engineering',
                 'course_code' => 'CSE201',
                 'description' => 'Software development methodologies and practices',
                 'credits' => 3,
-                'type' => 'theory',
+                'course_type' => 'theory',
             ],
             [
                 'title' => 'Final Year Project',
                 'course_code' => 'CSE401',
                 'description' => 'Capstone project for final year students',
                 'credits' => 6,
-                'type' => 'project',
+                'course_type' => 'project',
             ],
         ];
 
@@ -80,8 +81,7 @@ class CourseSeeder extends Seeder
                 'academic_year' => 2024,
                 'semester' => rand(1, 8),
                 'max_students' => rand(30, 80),
-                'type' => $courseData['type'],
-                'currency' => rand(1000, 5000),
+                'course_type' => $courseData['course_type'],
                 'is_active' => true,
             ]);
         }

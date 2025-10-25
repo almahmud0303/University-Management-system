@@ -71,11 +71,24 @@
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                        @php
+                            $roleLabel = Auth::user()->name;
+                            if(method_exists(Auth::user(), 'isAdmin') && Auth::user()->isAdmin()) {
+                                $roleLabel = 'System Administrator';
+                            } elseif(method_exists(Auth::user(), 'isTeacher') && Auth::user()->isTeacher()) {
+                                $roleLabel = 'Teacher';
+                            } elseif(method_exists(Auth::user(), 'isStudent') && Auth::user()->isStudent()) {
+                                $roleLabel = 'Student';
+                            } elseif(method_exists(Auth::user(), 'isStaff') && Auth::user()->isStaff()) {
+                                $roleLabel = 'Staff';
+                            }
+                        @endphp
 
-                            <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:text-gray-900 focus:outline-none transition ease-in-out duration-150">
+                            <div class="font-semibold">{{ $roleLabel }}</div>
+
+                            <div class="ml-2">
+                                <svg class="fill-current h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </div>
@@ -167,7 +180,20 @@
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                @php
+                    $roleLabelMobile = Auth::user()->name;
+                    if(method_exists(Auth::user(), 'isAdmin') && Auth::user()->isAdmin()) {
+                        $roleLabelMobile = 'System Administrator';
+                    } elseif(method_exists(Auth::user(), 'isTeacher') && Auth::user()->isTeacher()) {
+                        $roleLabelMobile = 'Teacher';
+                    } elseif(method_exists(Auth::user(), 'isStudent') && Auth::user()->isStudent()) {
+                        $roleLabelMobile = 'Student';
+                    } elseif(method_exists(Auth::user(), 'isStaff') && Auth::user()->isStaff()) {
+                        $roleLabelMobile = 'Staff';
+                    }
+                @endphp
+
+                <div class="font-medium text-base text-gray-800">{{ $roleLabelMobile }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 

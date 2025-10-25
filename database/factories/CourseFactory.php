@@ -36,8 +36,7 @@ class CourseFactory extends Factory
             'academic_year' => $this->faker->numberBetween(2020, 2024),
             'semester' => $this->faker->numberBetween(1, 8),
             'max_students' => $this->faker->numberBetween(30, 100),
-            'type' => $this->faker->randomElement(['theory', 'lab', 'project', 'thesis']),
-            'currency' => $this->faker->numberBetween(1000, 5000),
+            'course_type' => $this->faker->randomElement(['theory', 'lab', 'project', 'thesis']),
             'is_active' => true,
         ];
     }
@@ -58,7 +57,7 @@ class CourseFactory extends Factory
     public function lab(): static
     {
         return $this->state(fn (array $attributes) => [
-            'type' => 'lab',
+            'course_type' => 'lab',
             'credits' => 1,
         ]);
     }
@@ -69,7 +68,7 @@ class CourseFactory extends Factory
     public function theory(): static
     {
         return $this->state(fn (array $attributes) => [
-            'type' => 'theory',
+            'course_type' => 'theory',
             'credits' => $this->faker->numberBetween(2, 4),
         ]);
     }
